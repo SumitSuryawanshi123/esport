@@ -1,6 +1,6 @@
 fastapi
 google
-os
+os-sys
 dotenv
 PIL
 json
