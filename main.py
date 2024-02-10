@@ -23,15 +23,7 @@ def get_gemini_response_image(input_prompt,img):
     response = model.generate_content([input_prompt,img[0]])
     return response.text
 
-# def input_image_setup(upload_file):
-#     if upload_file is not None:
-#         bytes_data =upload_file.read()
-#         return {
-#             "mime_type": upload_file.content_type,
-#             "data": bytes_data
-#         }
-#     else:
-#         raise FileNotFoundError("No file uploaded")
+
 
 def input_image_setup(upload_file):
     if upload_file is not None:
@@ -73,6 +65,14 @@ valorant_img_input_prompt = """
 use above format for all players
 """
 
+translation_prompt = """ 
+transalate the input chat to english language,
+input chat is : : {text}
+
+ The response will be provided in a single string with the following structure:
+ {{"translated_chat":"?"}
+"""
+
 @app.get("/")
 def red_root():
     return "welcome"
@@ -83,6 +83,7 @@ async def sentiment(text: str = Form(...)):
     Sentiment_response = get_gemini_response_sentiment(sentiment_input_prompt.format(text=text))
     return json.loads(Sentiment_response)
 
+
 @app.post("/extract_text/")
 async def extract_text(img: UploadFile = File(...),game_name: str = Form(...)):
     new_img = input_image_setup(img)
@@ -91,6 +92,13 @@ async def extract_text(img: UploadFile = File(...),game_name: str = Form(...)):
     if game_name == "VALORANT" or game_name == "valorant":
         img_text = get_gemini_response_image(valorant_img_input_prompt,new_img)
     return  json.loads(img_text)
+
+
+@app.post("/translate_chat/")
+async def translate(text: str = Form(...)):
+    translate_response = get_gemini_response_sentiment(f"translate into english {text} give response in json format")
+    return json.loads(translate_response)
+
 
 # if __name__ == "__main__":
 #     import uvicorn
