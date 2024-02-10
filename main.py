@@ -63,6 +63,10 @@ img_input_prompt = """
 
 use above format for all players
 """
+@app.get("/")
+def red_root():
+    return "welcome"
+
 
 @app.post("/get_sentiment/")
 async def sentiment(text: str = Form(...)):
@@ -76,10 +80,9 @@ async def extract_text(img: UploadFile = File(...)):
     img_text = get_gemini_response_image(img_input_prompt,new_img)
     return  json.loads(img_text)
 
+# if __name__ == "__main__":
+#     import uvicorn
 
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=10000)
+#     uvicorn.run(app, host="0.0.0.0", port=10000)
 
 
