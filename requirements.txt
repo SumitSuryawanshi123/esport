@@ -1,6 +1,3 @@
 fastapi
-google
-os-sys
-dotenv
-PIL
-json
+python-dotenv
+google-generativeai
